@@ -40,6 +40,13 @@ jobs:
           if (-not (Test-Path 'artifacts/windows/Tracking.Windows.exe')) { throw 'Windows executable was not produced.' }
           $runtimeFiles = @(Get-ChildItem 'artifacts/windows' -Recurse -File -Filter 'Microsoft.WindowsAppRuntime*' -ErrorAction SilentlyContinue)
           if ($runtimeFiles.Count -eq 0) { throw 'Windows App SDK self-contained runtime was not included.' }
+      - name: Upload verified self-contained Windows build
+        uses: actions/upload-artifact@v4
+        with:
+          name: unnamed-tracking-mobile-windows-${{ github.sha }}
+          path: artifacts/windows/
+          if-no-files-found: error
+          retention-days: 14
   security:
     runs-on: ubuntu-latest
     steps:
