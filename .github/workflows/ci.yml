@@ -21,6 +21,13 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-dotnet@v4
         with: {dotnet-version: '8.0.x'}
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: nuget-${{ runner.os }}-net8-${{ hashFiles('**/*.csproj', '**/*.props', '**/*.targets') }}
+          restore-keys: |
+            nuget-${{ runner.os }}-net8-
       - name: Test Windows core
         run: dotnet test src/windowsapp/Tracking.Windows.Tests/Tracking.Windows.Tests.csproj --configuration Release
       - name: Build Windows x64
